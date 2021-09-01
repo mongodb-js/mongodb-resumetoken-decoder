@@ -124,7 +124,7 @@ function uint8ArrayToHex(arr: Uint8Array): string {
 }
 
 function hexToUint8Array(str: string): Uint8Array {
-  return new Uint8Array((str.match(/../g) ?? []).map(byte => parseInt(byte, 16)));
+  return new Uint8Array((str.match(/../g) || []).map(byte => parseInt(byte, 16)));
 }
 
 const ieee754dv = new DataView(new ArrayBuffer(8));
