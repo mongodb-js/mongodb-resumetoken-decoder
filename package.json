@@ -1,0 +1,70 @@
+{
+  "name": "mongodb-resumetoken-decoder",
+  "version": "1.0.0",
+  "description": "A helper tool for decoding MongoDB change stream resume tokens",
+  "keywords": [
+    "mongodb",
+    "change",
+    "stream",
+    "resume",
+    "token"
+  ],
+  "homepage": "https://github.com/mongodb-js/mongodb-resumetoken-decoder",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mongodb-js/mongodb-resumetoken-decoder.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mongodb-js/mongodb-resumetoken-decoder/issues"
+  },
+  "main": "lib/index.js",
+  "bin": {
+    "mongodb-resumetoken-decoder": "bin/mongodb-resumetoken-decoder.js"
+  },
+  "exports": {
+    "require": "./lib/index.js",
+    "import": "./.esm-wrapper.mjs"
+  },
+  "files": [
+    "LICENSE-Community.txt",
+    "bin",
+    "lib",
+    "package.json",
+    "README.md",
+    ".esm-wrapper.mjs"
+  ],
+  "scripts": {
+    "lint": "eslint {src,test}/**/*.ts",
+    "pretestonly": "mongodb-runner start --topology=replicaset --port=27091",
+    "posttestonly": "mongodb-runner stop --topology=replicaset --port=27091",
+    "testonly": "nyc mocha --colors -r ts-node/register test/*.ts",
+    "test": "npm run lint && npm run build && npm run testonly",
+    "build": "npm run compile-ts && gen-esm-wrapper . ./.esm-wrapper.mjs",
+    "prepack": "npm run build",
+    "compile-ts": "tsc -p tsconfig.json"
+  },
+  "license": "SSPL",
+  "dependencies": {
+    "bson": "^4.5.1"
+  },
+  "devDependencies": {
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^16.4.10",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
+    "eslint-config-semistandard": "^15.0.1",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "gen-esm-wrapper": "^1.1.0",
+    "mocha": "^8.1.3",
+    "mongodb": "^4.1.1",
+    "mongodb-runner": "^4.8.3",
+    "nyc": "^15.1.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.3.5"
+  }
+}

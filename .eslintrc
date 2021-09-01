@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "semistandard",
+    "plugin:promise/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-empty-function": 0,
+    "no-return-assign": 0,
+    "no-use-before-define": 0,
+    "space-before-function-paren": ["error", "never"]
+  }
+}
