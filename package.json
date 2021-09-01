@@ -1,6 +1,6 @@
 {
   "name": "mongodb-resumetoken-decoder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A helper tool for decoding MongoDB change stream resume tokens",
   "keywords": [
     "mongodb",
