@@ -95,4 +95,17 @@ describe('decodeResumeToken', function() {
       ]
     });
   });
+
+  it('can decode non-document resume tokens', async() => {
+    const decoded = decodeResumeToken('82612F653E000000022B0229296E04');
+    assert.deepStrictEqual(bson.EJSON.serialize(decoded), {
+      timestamp: { $timestamp: { t: 1630496062, i: 2 } },
+      version: 1,
+      tokenType: 0,
+      txnOpIndex: 0,
+      fromInvalidate: false,
+      uuid: null,
+      documentKey: null
+    });
+  });
 });
