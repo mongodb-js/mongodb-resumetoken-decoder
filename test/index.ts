@@ -108,4 +108,18 @@ describe('decodeResumeToken', function() {
       documentKey: null
     });
   });
+
+  // See PM-1950
+  it('can decode new resume tokens', async() => {
+    const decoded = decodeResumeToken('826273BCD2000000012B022C0100296E5A1004808BBE9298B0403286C29EA48C4E162846645F696400646273BCD27257D30393BB73F70004');
+    assert.deepStrictEqual(decoded, {
+      timestamp: new bson.Timestamp({ t: 1651752146, i: 1 }),
+      version: 1,
+      tokenType: 128,
+      txnOpIndex: 0,
+      fromInvalidate: false,
+      uuid: new bson.UUID('808bbe92-98b0-4032-86c2-9ea48c4e1628'),
+      documentKey: { _id: new bson.ObjectId('6273bcd27257d30393bb73f7') }
+    });
+  });
 });
