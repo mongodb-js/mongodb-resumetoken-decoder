@@ -8,7 +8,8 @@ export interface ResumeToken {
   txnOpIndex: number;
   fromInvalidate: boolean | undefined;
   uuid: UUID | undefined;
-  documentKey: any;
+  documentKey?: any; // for version 1
+  eventIdentifier?: any // for version 2
 }
 
 function maybeToUUID(data: Binary | undefined): UUID | undefined {
@@ -26,8 +27,9 @@ export function decodeResumeToken(input: string): ResumeToken {
   const txnOpIndex = bson.shift();
   const fromInvalidate = version >= 1 ? bson.shift() : undefined;
   const uuid = maybeToUUID(bson.shift());
-  const documentKey = bson.shift();
+  const identifier = bson.shift();
+  const tokenKeyName = version === 2 ? 'eventIdentifier' : 'documentKey';
   return {
-    timestamp, version, tokenType, txnOpIndex, fromInvalidate, uuid, documentKey
+    timestamp, version, tokenType, txnOpIndex, fromInvalidate, uuid, [tokenKeyName]: identifier
   };
 }
