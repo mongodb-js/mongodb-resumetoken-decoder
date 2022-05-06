@@ -45,7 +45,7 @@
   },
   "license": "SSPL",
   "dependencies": {
-    "bson": "^4.5.1"
+    "bson": "^4.6.3"
   },
   "devDependencies": {
     "@types/mocha": "^8.0.3",

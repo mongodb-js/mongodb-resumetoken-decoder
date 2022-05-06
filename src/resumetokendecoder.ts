@@ -1,15 +1,15 @@
 import { keystringToBson } from './';
 import type { Timestamp, Binary, UUID } from 'bson';
 
-export interface ResumeToken {
+export type ResumeToken = {
   timestamp: Timestamp;
   version: number;
   tokenType: number | undefined;
   txnOpIndex: number;
   fromInvalidate: boolean | undefined;
   uuid: UUID | undefined;
-  documentKey: any;
-}
+} &
+  ({ documentKey?: any; eventIdentified?: never } | { documentKey?: never; eventIdentified?: any })
 
 function maybeToUUID(data: Binary | undefined): UUID | undefined {
   if (data) {
@@ -26,8 +26,9 @@ export function decodeResumeToken(input: string): ResumeToken {
   const txnOpIndex = bson.shift();
   const fromInvalidate = version >= 1 ? bson.shift() : undefined;
   const uuid = maybeToUUID(bson.shift());
-  const documentKey = bson.shift();
+  const identifierValue = bson.shift();
+  const identifierKey = version === 2 ? 'eventIdentifier' : 'documentKey';
   return {
-    timestamp, version, tokenType, txnOpIndex, fromInvalidate, uuid, documentKey
+    timestamp, version, tokenType, txnOpIndex, fromInvalidate, uuid, [identifierKey]: identifierValue
   };
 }
