@@ -27,9 +27,9 @@ export function decodeResumeToken(input: string): ResumeToken {
   const txnOpIndex = bson.shift();
   const fromInvalidate = version >= 1 ? bson.shift() : undefined;
   const uuid = maybeToUUID(bson.shift());
-  const identifier = bson.shift();
-  const tokenKeyName = version === 2 ? 'eventIdentifier' : 'documentKey';
+  const identifierValue = bson.shift();
+  const identifierKey = version === 2 ? 'eventIdentifier' : 'documentKey';
   return {
-    timestamp, version, tokenType, txnOpIndex, fromInvalidate, uuid, [tokenKeyName]: identifier
+    timestamp, version, tokenType, txnOpIndex, fromInvalidate, uuid, [identifierKey]: identifierValue
   };
 }
