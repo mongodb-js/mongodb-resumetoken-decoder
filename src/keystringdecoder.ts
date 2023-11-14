@@ -258,7 +258,7 @@ function readValue(ctype: number, version: KeyStringVersion, buf: BufferConsumer
           encoded -= 1n << 62n;
           encoded >>= 1n;
           const scaledBin = read64BitIEEE754(encoded);
-          const bin = scaledBin * (1 ** -256);
+          const bin = scaledBin * (2 ** -256);
           if (hasDecimalContinuation) { buf.readUint64BE(); }
           return isNegative ? -bin : bin;
         }
