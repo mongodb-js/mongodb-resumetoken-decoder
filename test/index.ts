@@ -139,4 +139,29 @@ describe('decodeResumeToken', function() {
       version: 2
     });
   });
+
+  it('can decode resume tokens with a tiny double in them', () => {
+    const decoded = decodeResumeToken('8265523992000000012B022C0100296E5A1004754B35D306B342E8BA0A3DE71005B66446465F6964004650666F6F0050337F78F63E7958E8661F808709C186A717992A6083F43058818C1A289F7C0BCFA77E73E500000004');
+    assert.deepStrictEqual(decoded, {
+      eventIdentifier: {
+        documentKey: {
+          _id: {
+            foo: [
+              2e+307, 2e+307, 2e-307, 2e-307
+            ]
+          }
+        },
+        operationType: 'insert'
+      },
+      fromInvalidate: false,
+      timestamp: new bson.Timestamp({
+        t: 1651836794,
+        i: 1
+      }),
+      tokenType: 128,
+      txnOpIndex: 0,
+      uuid: new bson.UUID('bffdb617-400e-4860-9900-7c0e0048b305'),
+      version: 2
+    });
+  });
 });
