@@ -1,21 +1,30 @@
 import assert from 'assert';
 import { decodeResumeToken, ResumeToken } from '../';
 import { MongoClient, Db, Collection } from 'mongodb';
+import { MongoCluster } from 'mongodb-runner';
 import bson from 'bson';
+import { tmpdir } from 'os';
 
 describe('decodeResumeToken', function() {
-  this.timeout(10_000);
+  this.timeout(30_000);
 
+  let cluster: MongoCluster;
   let client: MongoClient;
   let db: Db;
   let coll: Collection;
 
   before(async() => {
-    client = await MongoClient.connect('mongodb://localhost:27091');
+    cluster = await MongoCluster.start({
+      topology: 'replset',
+      tmpDir: tmpdir(),
+      secondaries: 0
+    });
+    client = await MongoClient.connect(cluster.connectionString);
   });
 
   after(async() => {
     await client.close();
+    await cluster.close();
   });
 
   beforeEach(async() => {
@@ -35,7 +44,7 @@ describe('decodeResumeToken', function() {
       const data: any = await csCursor.tryNext();
       const resumeToken = decodeResumeToken(data._id._data);
       assert.deepStrictEqual(
-        bson.EJSON.serialize(resumeToken.documentKey._id),
+        bson.EJSON.serialize(resumeToken.eventIdentifier.documentKey._id),
         bson.EJSON.serialize(id));
       return resumeToken;
     } finally {

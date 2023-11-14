@@ -9,7 +9,7 @@ export type ResumeToken = {
   fromInvalidate: boolean | undefined;
   uuid: UUID | undefined;
 } &
-  ({ documentKey?: any; eventIdentified?: never } | { documentKey?: never; eventIdentified?: any })
+  ({ documentKey?: any; eventIdentifier?: never } | { documentKey?: never; eventIdentifier?: any })
 
 function maybeToUUID(data: Binary | undefined): UUID | undefined {
   if (data) {
