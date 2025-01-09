@@ -22,9 +22,18 @@
     "mongodb-resumetoken-decoder": "bin/mongodb-resumetoken-decoder.js"
   },
   "exports": {
-    "require": "./lib/index.js",
-    "import": "./.esm-wrapper.mjs"
+    ".": {
+      "import": {
+        "types": "./lib/index.d.ts",
+        "default": "./.esm-wrapper.mjs"
+      },
+      "require": {
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
+      }
+    }
   },
+  "types": "./lib/index.d.ts",
   "files": [
     "LICENSE-Community.txt",
     "bin",
