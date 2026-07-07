@@ -8,6 +8,7 @@ export type ResumeToken = {
   txnOpIndex: number;
   fromInvalidate: boolean | undefined;
   uuid: UUID | undefined;
+  fragmentNum?: number;
 } &
   ({ documentKey?: any; eventIdentifier?: never } | { documentKey?: never; eventIdentifier?: any })
 
@@ -28,7 +29,19 @@ export function decodeResumeToken(input: string): ResumeToken {
   const uuid = maybeToUUID(bson.shift());
   const identifierValue = bson.shift();
   const identifierKey = version === 2 ? 'eventIdentifier' : 'documentKey';
+  // Change events that exceed the 16MB BSON limit can be split into multiple
+  // fragments via the $changeStreamSplitLargeEvent stage. In that case the
+  // resume token carries a trailing `fragmentNum` (v2+ tokens only). It is
+  // absent for regular, non-split events.
+  const fragmentNum = version >= 2 ? bson.shift() : undefined;
   return {
-    timestamp, version, tokenType, txnOpIndex, fromInvalidate, uuid, [identifierKey]: identifierValue
+    timestamp,
+    version,
+    tokenType,
+    txnOpIndex,
+    fromInvalidate,
+    uuid,
+    [identifierKey]: identifierValue,
+    ...(fragmentNum !== undefined ? { fragmentNum } : {})
   };
 }
