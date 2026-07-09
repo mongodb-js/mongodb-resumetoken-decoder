@@ -140,6 +140,36 @@ describe('decodeResumeToken', function() {
     });
   });
 
+  // See COMPASS-9000 / SPM-2677: change events exceeding 16MB are split into
+  // fragments via $changeStreamSplitLargeEvent, and each fragment's resume
+  // token carries a (zero-based) `fragmentNum`.
+  it('can decode resume tokens from split large change events', () => {
+    const decoded = decodeResumeToken('826A4D067B000000022B042C0100296E5A10045C80F19702C34330937D680707661898463C6F7065726174696F6E54797065003C7570646174650046646F63756D656E744B657900461E5F6964002B0200002904');
+    assert.deepStrictEqual(decoded, {
+      eventIdentifier: {
+        operationType: 'update',
+        documentKey: {
+          _id: 1
+        }
+      },
+      fragmentNum: 0,
+      fromInvalidate: false,
+      timestamp: new bson.Timestamp({
+        t: 1783432827,
+        i: 2
+      }),
+      tokenType: 128,
+      txnOpIndex: 0,
+      uuid: new bson.UUID('5c80f197-02c3-4330-937d-680707661898'),
+      version: 2
+    });
+  });
+
+  it('does not add a fragmentNum to non-split resume tokens', () => {
+    const decoded = decodeResumeToken('826275077A000000012B042C0100296E5A1004BFFDB617400E486099007C0E0048B305463C6F7065726174696F6E54797065003C696E736572740046646F63756D656E744B65790046645F696400646275077A2F3159F971E405C6000004');
+    assert.ok(!('fragmentNum' in decoded));
+  });
+
   it('can decode resume tokens with a tiny double in them', () => {
     const decoded = decodeResumeToken('8265523992000000012B022C0100296E5A1004754B35D306B342E8BA0A3DE71005B66446465F6964004650666F6F0050337F78F63E7958E8661F808709C186A717992A6083F43058818C1A289F7C0BCFA77E73E500000004');
     assert.deepStrictEqual(decoded, {
