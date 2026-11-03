@@ -1,7 +1,7 @@
 import assert from 'assert';
 import { decodeResumeToken, ResumeToken } from '../';
 import { MongoClient, Db, Collection } from 'mongodb';
-import { MongoCluster } from 'mongodb-runner';
+import { MongoCluster } from '@mongodb-js/mongodb-runner';
 import bson from 'bson';
 import { tmpdir } from 'os';
 
